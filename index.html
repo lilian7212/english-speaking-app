@@ -12,6 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <style>
+        /* ★ 請在這裡設定您的 Google Apps Script 網頁應用程式網址 ★ */
+        /* 例如: const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx.../exec"; */
         body {
             font-family: 'Noto Sans TC', sans-serif;
             background-color: #F8FAFC;
@@ -19,7 +21,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* 膠囊音標積木樣式 (Pill Shape) - Optimized for mobile touch targets */
         .block-tile {
             display: inline-flex;
             align-items: center;
@@ -47,7 +48,6 @@
             box-shadow: 0 3px 6px rgba(147, 197, 253, 0.2);
         }
 
-        /* 拼音組合晶片 */
         .chip-item {
             display: inline-flex;
             align-items: center;
@@ -69,7 +69,6 @@
             color: #dc2626;
         }
 
-        /* 結構化音標 (支援高上標與上下垂直組合) 樣式 */
         .phonetic-symbol {
             display: inline-flex;
             align-items: center;
@@ -84,7 +83,6 @@
             color: #0f172a;
         }
 
-        /* SVG 繪製精準重現手繪圖 (Y字分叉上方開口浮著愛心) */
         .y-heart-svg {
             display: inline-block;
             vertical-align: middle;
@@ -92,7 +90,6 @@
             height: 1.25em;
         }
         
-        /* 上下垂直直接疊加 */
         .phonetic-symbol.is-vertical-stack {
             display: inline-flex;
             flex-direction: column;
@@ -115,7 +112,6 @@
             color: #0f172a;
         }
 
-        /* 右側上下標堆疊 */
         .phonetic-symbol .symbol-stack {
             display: inline-flex;
             flex-direction: column;
@@ -153,13 +149,11 @@
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
         <div class="max-w-4xl mx-auto px-3 sm:px-4 flex justify-between items-center h-14 sm:h-16">
             
-            <!-- Logo -->
             <div class="flex items-center space-x-2">
                 <span class="bg-blue-500 text-white font-black px-2 py-0.5 rounded-lg text-base sm:text-lg tracking-wider shadow-xs">專</span>
-                <h1 class="text-base sm:text-xl font-extrabold text-slate-800 tracking-tight">英文口說一點通</h1>
+                <h1 class="text-base sm:text-xl font-extrabold text-slate-800 tracking-tight">英文口說一點通 (雲端同步版)</h1>
             </div>
 
-            <!-- Tab Navigation Switches -->
             <nav class="flex gap-1.5 sm:gap-2 items-center">
                 <button id="tabBtnSearch" onclick="switchTab('search')" 
                         class="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 bg-blue-50 text-blue-600 border border-blue-200 shadow-xs">
@@ -184,7 +178,6 @@
         <!-- ================= PAGE 1: SEARCH & SPELLING PAGE ================= -->
         <div id="pageSearch" class="space-y-4 sm:space-y-6">
 
-            <!-- Search Bar Area -->
             <div class="bg-white border-2 border-blue-100 rounded-2xl p-3.5 sm:p-4 shadow-xs flex flex-col sm:flex-row items-center gap-3">
                 <div class="relative flex-1 w-full">
                     <input type="text" id="searchInput" placeholder="輸入英文單字（例: lawyer, launch）" 
@@ -197,17 +190,13 @@
                 </button>
             </div>
 
-            <!-- Initial Empty State -->
             <div id="initialState" class="bg-white rounded-2xl border-2 border-dashed border-slate-200 p-8 sm:p-12 text-center text-slate-400 space-y-3">
                 <i class="fa-solid fa-language text-4xl sm:text-5xl text-slate-300"></i>
                 <h3 class="text-base sm:text-lg font-bold text-slate-600">請在上方輸入英文單字進行查詢</h3>
-                <p class="text-xs sm:text-sm text-slate-400 px-4">系統會自動抓取美式音標與中文翻譯，供您進行專利音標拼寫與收錄。</p>
+                <p class="text-xs sm:text-sm text-slate-400 px-4">系統會自動抓取美式音標與中文翻譯，並直接同步至 Google 雲端單字本。</p>
             </div>
 
-            <!-- Current Word Result Card (Hidden by Default) -->
             <div id="searchResultCard" class="hidden bg-white border-2 border-slate-200 rounded-2xl p-4 sm:p-6 shadow-xs relative space-y-4">
-                
-                <!-- Main Word Details -->
                 <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 border-b border-slate-100 pb-3.5">
                     <div class="flex items-center space-x-3 flex-wrap gap-y-2">
                         <h2 id="currentWord" class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">—</h2>
@@ -222,7 +211,6 @@
                     </button>
                 </div>
 
-                <!-- Custom Chinese Translation Box -->
                 <div>
                     <label class="block text-xs font-bold text-slate-500 mb-1">
                         <i class="fa-solid fa-language text-blue-500"></i> 中文解釋（可直接點擊修改）：
@@ -231,7 +219,6 @@
                            class="w-full px-3.5 py-2.5 text-sm sm:text-base border-2 border-blue-200 bg-blue-50/50 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 text-slate-800 font-medium transition">
                 </div>
 
-                <!-- Phonetic Assembly Output Box -->
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
@@ -253,13 +240,11 @@
                     </div>
                 </div>
 
-                <!-- Toast Notification -->
                 <div id="toastMessage" class="hidden p-3 rounded-xl border text-xs sm:text-sm flex justify-between items-center bg-emerald-50 border-emerald-200 text-emerald-800">
                     <div id="toastText" class="font-semibold"></div>
                 </div>
             </div>
 
-            <!-- Phonetic Keyboard Section -->
             <div class="bg-white border-2 border-slate-200 rounded-2xl p-4 sm:p-5 shadow-xs space-y-4">
                 <div class="flex justify-between items-center">
                     <div class="text-xs sm:text-sm font-bold text-slate-700 flex items-center gap-2">
@@ -271,9 +256,7 @@
                     </button>
                 </div>
 
-                <!-- Categorized Keyboard Grid -->
                 <div class="space-y-3 sm:space-y-4">
-                    <!-- 頭子音 Section -->
                     <div class="bg-slate-50/70 border border-slate-200/80 rounded-xl p-3">
                         <div class="text-xs font-bold text-blue-700 mb-2 flex items-center gap-1.5">
                             <span class="w-2 h-2 rounded-full bg-blue-500"></span> 頭子音 (Initial Consonants)
@@ -281,7 +264,6 @@
                         <div id="keyboardGridHead" class="flex flex-wrap gap-2 min-h-[36px]"></div>
                     </div>
 
-                    <!-- 母音 Section -->
                     <div class="bg-slate-50/70 border border-slate-200/80 rounded-xl p-3">
                         <div class="text-xs font-bold text-amber-700 mb-2 flex items-center gap-1.5">
                             <span class="w-2 h-2 rounded-full bg-amber-500"></span> 母音 (Vowels)
@@ -289,7 +271,6 @@
                         <div id="keyboardGridVowel" class="flex flex-wrap gap-2 min-h-[36px]"></div>
                     </div>
 
-                    <!-- 尾子音 Section -->
                     <div class="bg-slate-50/70 border border-slate-200/80 rounded-xl p-3">
                         <div class="text-xs font-bold text-emerald-700 mb-2 flex items-center gap-1.5">
                             <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 尾子音 (Final Consonants)
@@ -304,14 +285,12 @@
         <!-- ================= PAGE 2: VOCABULARY BOOK PAGE ================= -->
         <div id="pageVocab" class="hidden space-y-4 sm:space-y-6">
 
-            <!-- Top Header & Action Toolbar -->
             <div class="bg-white border-2 border-amber-100 rounded-2xl p-4 sm:p-5 shadow-xs space-y-3.5">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <h2 class="text-xl sm:text-2xl font-black text-slate-800 flex items-center gap-2">
-                        <i class="fa-solid fa-book-bookmark text-amber-500"></i> 我的專利音標單字本
+                        <i class="fa-solid fa-book-bookmark text-amber-500"></i> 我的雲端專利音標單字本
                     </h2>
 
-                    <!-- Action Buttons -->
                     <div id="vocabActions" class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                         <button onclick="exportVocabText()" class="flex-1 sm:flex-initial px-3 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5">
                             <i class="fa-regular fa-copy"></i> 複製文字
@@ -325,7 +304,6 @@
                     </div>
                 </div>
 
-                <!-- Search Filter in Vocab Book -->
                 <div class="relative w-full pt-1 border-t border-slate-100">
                     <input type="text" id="vocabSearchInput" oninput="renderVocabList()" placeholder="搜尋單字本中的單字或中文..." 
                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:bg-white focus:border-amber-400 transition">
@@ -333,7 +311,6 @@
                 </div>
             </div>
 
-            <!-- Vocabulary Table List Area -->
             <div id="vocabTableWrapper" class="bg-white border-2 border-slate-200 rounded-2xl shadow-xs overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse min-w-[500px]">
@@ -346,14 +323,11 @@
                                 <th class="py-3 px-3 w-14 text-center">操作</th>
                             </tr>
                         </thead>
-                        <tbody id="vocabTableBody" class="divide-y divide-slate-100 text-sm">
-                            <!-- Rows dynamically populated -->
-                        </tbody>
+                        <tbody id="vocabTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Empty State View -->
             <div id="emptyVocabState" class="hidden bg-white border-2 border-dashed border-slate-300 rounded-2xl p-10 text-center space-y-4">
                 <div class="w-14 h-14 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center mx-auto text-xl">
                     <i class="fa-solid fa-book-open"></i>
@@ -384,7 +358,6 @@
             </div>
 
             <div class="p-4 sm:p-5 overflow-y-auto space-y-5 flex-1">
-                <!-- Add New Symbol Form -->
                 <div class="bg-blue-50/60 border border-blue-100 rounded-xl p-3.5 sm:p-4 space-y-3">
                     <h4 class="font-bold text-xs sm:text-sm text-blue-900 flex items-center gap-1.5">
                         <i class="fa-solid fa-plus-circle"></i> 新增音標積木
@@ -429,7 +402,6 @@
                     </form>
                 </div>
 
-                <!-- Existing Symbols Management -->
                 <div class="space-y-3">
                     <div class="flex justify-between items-center">
                         <h4 class="font-bold text-xs sm:text-sm text-slate-700">已儲存的音標積木列表</h4>
@@ -463,7 +435,7 @@
         </div>
     </div>
 
-    <!-- Custom Modal Replacement for Alert/Confirm -->
+    <!-- Custom Modal Replacement -->
     <div id="customModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-xs sm:max-w-sm w-full p-5 sm:p-6 shadow-2xl border border-slate-100 space-y-3.5">
             <div id="customModalTitle" class="text-base sm:text-lg font-bold text-slate-800">提示</div>
@@ -474,9 +446,11 @@
         </div>
     </div>
 
-    <!-- JavaScript Application Logic -->
+    <!-- JavaScript Application Logic with Google Apps Script Sync -->
     <script>
-        // Built-in basic dictionary mapping common English words to Traditional Chinese translations and American IPA
+        // ★ 請將下方引號內的網址替換為您的 Google Apps Script 部署網址 ★
+        const GAS_API_URL = "https://script.google.com/macros/s/YOUR_APPS_SCRIPT_ID/exec";
+
         const builtInDict = {
             "cat": { trans: "貓", ipa: "/kæt/" },
             "dog": { trans: "狗", ipa: "/dɔːɡ/" },
@@ -547,9 +521,9 @@
         let symbols = [];
         let vocabBook = [];
 
-        window.onload = function() {
-            loadSymbols();
-            loadVocabBook();
+        window.onload = async function() {
+            await loadSymbols();
+            await loadVocabBook();
             renderKeyboard();
         };
 
@@ -650,35 +624,51 @@
             `.trim();
         }
 
-        function loadSymbols() {
-            const saved = localStorage.getItem('patent_phonetic_symbols');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                symbols = parsed.map(item => ({ ...item, category: item.category || 'vowel' }));
-            } else {
-                symbols = [...defaultSymbols];
+        // 從 Google 雲端載入音標積木
+        async function loadSymbols() {
+            try {
+                const res = await fetch(`${GAS_API_URL}?action=getSymbols`);
+                const cloudData = await res.json();
+                if (cloudData && Array.isArray(cloudData) && cloudData.length > 0) {
+                    symbols = cloudData.map(item => ({ ...item, category: item.category || 'vowel' }));
+                } else {
+                    symbols = [...defaultSymbols];
+                }
+            } catch (e) {
+                const saved = localStorage.getItem('patent_phonetic_symbols');
+                symbols = saved ? JSON.parse(saved) : [...defaultSymbols];
             }
         }
 
-        function saveSymbols() {
+        // 同步至 Google 雲端音標積木
+        async function saveSymbols() {
+            localStorage.setItem('patent_phonetic_symbols', JSON.stringify(symbols));
             try {
-                localStorage.setItem('patent_phonetic_symbols', JSON.stringify(symbols));
-            } catch (e) {}
-        }
-
-        function loadVocabBook() {
-            const saved = localStorage.getItem('patent_vocab_book');
-            if (saved) {
-                try { vocabBook = JSON.parse(saved); } catch (e) { vocabBook = []; }
-            } else {
-                vocabBook = [];
+                await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'saveSymbols', symbols: symbols })
+                });
+            } catch (e) {
+                console.error("同步積木至雲端失敗", e);
             }
         }
 
-        function saveVocabBookStorage() {
+        // 從 Google 雲端載入單字本
+        async function loadVocabBook() {
             try {
-                localStorage.setItem('patent_vocab_book', JSON.stringify(vocabBook));
-            } catch (e) {}
+                const res = await fetch(`${GAS_API_URL}?action=getVocab`);
+                const cloudData = await res.json();
+                if (Array.isArray(cloudData)) {
+                    vocabBook = cloudData;
+                    localStorage.setItem('patent_vocab_book', JSON.stringify(vocabBook));
+                }
+            } catch (e) {
+                const saved = localStorage.getItem('patent_vocab_book');
+                vocabBook = saved ? JSON.parse(saved) : [];
+            }
+            renderVocabList();
         }
 
         function renderKeyboard() {
@@ -836,7 +826,8 @@
             }
         }
 
-        function saveToVocabBook() {
+        // 新增或更新單字至雲端
+        async function saveToVocabBook() {
             if (!currentWordData || !currentWordData.word || currentWordData.word === '—') {
                 return showAppAlert("請先輸入英文單字並點擊查詢！");
             }
@@ -844,19 +835,6 @@
             const customTrans = document.getElementById('customTransInput').value.trim();
             const patentSpellingHTML = selectedBlocks.map(b => buildSymbolHTML(b)).join(' ');
             const targetWord = currentWordData.word.toLowerCase();
-
-            const existingIndex = vocabBook.findIndex(item => item.word.toLowerCase() === targetWord);
-
-            if (existingIndex !== -1) {
-                showAppConfirm(`單字本中已存在「${currentWordData.word}」，是否更新？`, () => {
-                    vocabBook[existingIndex].ipa = currentWordData.ipa;
-                    vocabBook[existingIndex].patent = patentSpellingHTML || '<span class="text-slate-400 font-normal">(未拼寫)</span>';
-                    vocabBook[existingIndex].translation = customTrans || "(無中文解釋)";
-                    saveVocabBookStorage();
-                    showToast(`已更新 「${currentWordData.word}」！`);
-                });
-                return;
-            }
 
             const entry = {
                 id: Date.now(),
@@ -866,9 +844,26 @@
                 translation: customTrans || "(無中文解釋)"
             };
 
-            vocabBook.unshift(entry);
-            saveVocabBookStorage();
-            showToast(`已加入單字本！`);
+            const existingIndex = vocabBook.findIndex(item => item.word.toLowerCase() === targetWord);
+            if (existingIndex !== -1) {
+                vocabBook[existingIndex] = entry;
+            } else {
+                vocabBook.unshift(entry);
+            }
+
+            localStorage.setItem('patent_vocab_book', JSON.stringify(vocabBook));
+            showToast(`已儲存 「${currentWordData.word}」至雲端！`);
+
+            try {
+                fetch(GAS_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'saveVocab', data: entry })
+                });
+            } catch (e) {
+                console.error("同步至雲端失敗", e);
+            }
         }
 
         function showToast(text) {
@@ -950,17 +945,39 @@
             });
         }
 
-        function deleteVocabItem(index) {
+        async function deleteVocabItem(index) {
+            const itemToDelete = vocabBook[index];
+            if (!itemToDelete) return;
+
             vocabBook.splice(index, 1);
-            saveVocabBookStorage();
+            localStorage.setItem('patent_vocab_book', JSON.stringify(vocabBook));
             renderVocabList();
+
+            try {
+                fetch(GAS_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'deleteVocab', id: itemToDelete.id })
+                });
+            } catch (e) {
+                console.error("雲端刪除失敗", e);
+            }
         }
 
         function clearVocabBook() {
-            showAppConfirm("確定要清空所有單字本嗎？", () => {
+            showAppConfirm("確定要清空所有單字本嗎？", async () => {
                 vocabBook = [];
-                saveVocabBookStorage();
+                localStorage.setItem('patent_vocab_book', JSON.stringify(vocabBook));
                 renderVocabList();
+                try {
+                    fetch(GAS_API_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'clearVocab' })
+                    });
+                } catch (e) {}
             });
         }
 
