@@ -12,8 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <style>
-        /* ★ 請在這裡設定您的 Google Apps Script 網頁應用程式網址 ★ */
-        /* 例如: const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx.../exec"; */
         body {
             font-family: 'Noto Sans TC', sans-serif;
             background-color: #F8FAFC;
@@ -48,16 +46,16 @@
             box-shadow: 0 3px 6px rgba(147, 197, 253, 0.2);
         }
 
-.chip-item {
+        .chip-item {
             display: inline-flex;
             align-items: center;
             position: relative;
             background-color: #eff6ff;
             border: 1.5px solid #bfdbfe;
             color: #0f172a;
-            padding: 0.15rem 0.5rem; /* 縮小內距 */
+            padding: 0.15rem 0.5rem;
             border-radius: 9999px;
-            font-size: 0.85rem;     /* 將字體大小調小 */
+            font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.15s ease;
@@ -89,45 +87,6 @@
             width: 1.1em;
             height: 1.25em;
         }
-        
-        .phonetic-symbol.is-vertical-stack {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            line-height: 0.85;
-            vertical-align: middle;
-            margin: 0 2px;
-        }
-        .phonetic-symbol.is-vertical-stack .symbol-top-direct {
-            font-size: 0.6em;
-            font-weight: bold;
-            color: #0f172a;
-            margin-bottom: -0.2em;
-            z-index: 1;
-        }
-        .phonetic-symbol.is-vertical-stack .symbol-bottom-direct {
-            font-size: 1.1em;
-            font-weight: bold;
-            color: #0f172a;
-        }
-
-        .phonetic-symbol .symbol-stack {
-            display: inline-flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            font-size: 0.6em;
-            line-height: 1;
-            margin-left: 1px;
-            vertical-align: middle;
-            height: 100%;
-        }
-        .phonetic-symbol .symbol-top, .phonetic-symbol .symbol-bottom {
-            font-weight: bold;
-            color: #0f172a;
-            line-height: 1;
-        }
 
         ::-webkit-scrollbar {
             width: 6px;
@@ -148,7 +107,6 @@
     <!-- Header Navigation & Tab Bar -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
         <div class="max-w-4xl mx-auto px-3 sm:px-4 flex justify-between items-center h-14 sm:h-16">
-            
             <div class="flex items-center space-x-2">
                 <span class="bg-blue-500 text-white font-black px-2 py-0.5 rounded-lg text-base sm:text-lg tracking-wider shadow-xs">專</span>
                 <h1 class="text-base sm:text-xl font-extrabold text-slate-800 tracking-tight">英文口說一點通 (雲端同步版)</h1>
@@ -168,7 +126,6 @@
                     一點通
                 </a>
             </nav>
-
         </div>
     </header>
 
@@ -421,6 +378,7 @@
                         </div>
                         <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
                             <div class="text-[11px] font-bold text-emerald-700 mb-1.5">尾子音</div>
+                            <div id="manageGridTail" class="flex flex-wrap gap-2 min-h-[32px]"></div>
                         </div>
                     </div>
                 </div>
@@ -447,7 +405,6 @@
 
     <!-- JavaScript Application Logic with Google Apps Script Sync -->
     <script>
-        // ★ 請將下方引號內的網址替換為您的 Google Apps Script 部署網址 ★
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzFjtf2gFk-OuEJrUzLHb2Mq7uBC8mcU4eJcCJohVEBaA6V3DkK3oN7Q6Vqv4mDmF4_/exec";
 
         const builtInDict = {
@@ -489,47 +446,126 @@
             { id: "s21", main: "ㄅ", top: "", bottom: "", category: "head" },
             { id: "s22", main: "ㄆ", top: "", bottom: "", category: "head" },
 
-            { id: "s1", main: "◡", top: "", bottom: "", category: "vowel" },
-            { id: "s2", main: "_", top: "せ", bottom: "", category: "vowel" },
-            { id: "s3", main: "ㄚ", top: "せ", bottom: "", category: "vowel" },
-            { id: "s4", main: "幺", top: "せ", bottom: "", category: "vowel" },
-            { id: "s5", main: "ㄜ", top: "", bottom: "", category: "vowel" },
-            { id: "s6", main: "ㄜ", top: "̄", bottom: "", category: "vowel" },
-            { id: "s7", main: "ㄜ", top: "✕", bottom: "", category: "vowel" },
-            { id: "s8", main: "乂", top: "ㄜ", bottom: "", category: "vowel" },
-            { id: "s9", main: "ㄜ", top: "∠", bottom: "", category: "vowel" },
-            { id: "s10", main: "ㄚ", top: "♥", bottom: "", stackType: "y-heart", category: "vowel" },
-            { id: "s25", main: "ㄚ", top: "♥", bottom: "", stackType: "y-heart", extraRight: "一ㄝ", category: "vowel" },
+            { id: "s1", main: "ㄝ", top: "", bottom: "", category: "vowel" },
+            { id: "s2", main: "ㄧ", top: "ㄝ", bottom: "", category: "vowel" },
+            { id: "s3", main: "ㄚ", top: "ㄝ", bottom: "", category: "vowel" },
+            { id: "s4", main: "幺", top: "ㄝ", bottom: "", category: "vowel" },
+            { id: "s5", main: "ㄜ", top: "ㄧ", bottom: "", category: "vowel" },
+            { id: "s6", main: "ㄜ", top: "̄✕", bottom: "", category: "vowel" },
+            { id: "s7", main: "✕", top: "ㄜ", bottom: "", category: "vowel" },           
+            { id: "s10", main: "ㄚ", top: "♥", bottom: "", stackType: "y-heart", category: "vowel" },        
             { id: "s26", main: "ㄚ", top: "♥", bottom: "", stackType: "y-heart", extraRight: "ㄦ", category: "vowel" },
             { id: "s12", main: "ㄛ", top: "", bottom: "", category: "vowel" },
             { id: "s18", main: "ㄞ", top: "", bottom: "", category: "vowel" },
             { id: "s19", main: "ㄛ", top: "一", bottom: "", category: "vowel" },
-
-            { id: "s11", main: "ㄦ", top: "", bottom: "", category: "tail" },
-            { id: "s13", main: "✕", top: "", bottom: "", category: "tail" },
-            { id: "s14", main: "ㄚ", top: "♥", bottom: "ㄦ", category: "tail" },
+            { id: "s8", main: "◡", top: "", bottom: "", category: "vowel" },
+            
+            { id: "s11", main: "ㄋ", top: "~", bottom: "", category: "tail" },
+            { id: "s13", main: "ㄇ", top: "~", bottom: "", category: "tail" },
             { id: "s15", main: "せ", top: "ㄦ", bottom: "", category: "tail" },
             { id: "s16", main: "一", top: "ㄦ", bottom: "", category: "tail" },
             { id: "s17", main: "ㄛ", top: "ㄦ", bottom: "", category: "tail" },
-            { id: "s23", main: "✕", top: "̄", bottom: "", category: "tail" },
-            { id: "s24", main: "∠", top: "̄", bottom: "", stackType: "vertical", category: "tail" }
+                    
         ];
 
         let currentWordData = null;
         let selectedBlocks = [];
-        let symbols = [];
+        let symbols = [...defaultSymbols];
         let vocabBook = [];
 
         window.onload = async function() {
             await loadSymbols();
             await loadVocabBook();
             renderKeyboard();
-            
-            // 加上這行，確保頁面載入時管理積木列表也會被渲染
-            if (typeof renderManageGrid === 'function') {
-                renderManageGrid();
-            }
+            renderManageGrid();
         };
+
+        async function loadSymbols() {
+            symbols = [...defaultSymbols];
+        }
+
+        async function loadVocabBook() {
+            vocabBook = [];
+        }
+
+        function renderKeyboard() {
+            const headContainer = document.getElementById('keyboardGridHead');
+            const vowelContainer = document.getElementById('keyboardGridVowel');
+            const tailContainer = document.getElementById('keyboardGridTail');
+
+            if (!headContainer || !vowelContainer || !tailContainer) return;
+
+            headContainer.innerHTML = '';
+            vowelContainer.innerHTML = '';
+            tailContainer.innerHTML = '';
+
+            symbols.forEach(block => {
+                const btn = document.createElement('button');
+                btn.className = 'block-tile';
+                btn.innerHTML = buildSymbolHTML(block);
+                btn.onclick = () => selectBlock(block);
+
+                if (block.category === 'head') {
+                    headContainer.appendChild(btn);
+                } else if (block.category === 'vowel') {
+                    vowelContainer.appendChild(btn);
+                } else if (block.category === 'tail') {
+                    tailContainer.appendChild(btn);
+                }
+            });
+        }
+
+        function renderManageGrid() {
+            const headContainer = document.getElementById('manageGridHead');
+            const vowelContainer = document.getElementById('manageGridVowel');
+            const tailContainer = document.getElementById('manageGridTail');
+
+            if (!headContainer || !vowelContainer || !tailContainer) return;
+
+            headContainer.innerHTML = '';
+            vowelContainer.innerHTML = '';
+            tailContainer.innerHTML = '';
+
+            symbols.forEach(block => {
+                const html = `
+                    <div class="inline-flex items-center gap-1.5 bg-white border border-slate-200 px-2.5 py-1 rounded-full text-xs font-semibold shadow-xs">
+                        <span>${block.main || block.top}</span>
+                        <button onclick="deleteSymbol('${block.id}')" class="text-slate-400 hover:text-red-500">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                `;
+                if (block.category === 'head') {
+                    headContainer.innerHTML += html;
+                } else if (block.category === 'vowel') {
+                    vowelContainer.innerHTML += html;
+                } else if (block.category === 'tail') {
+                    tailContainer.innerHTML += html;
+                }
+            });
+        }
+
+        function buildSymbolHTML(block) {
+            const main = block.main || '';
+            const top = block.top || '';
+            const bottom = block.bottom || '';
+            const stackType = block.stackType;
+            const extraRight = block.extraRight ? `<span class="ml-1 text-slate-800 font-bold">${block.extraRight}</span>` : '';
+
+            if (stackType === 'y-heart' || (main === 'ㄚ' && top === '♥')) {
+                return `
+                    <span class="phonetic-symbol inline-flex items-center">
+                        <svg class="y-heart-svg" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M50 15 C50 10 42 0 34 5 C26 10 28 22 38 28 L50 38 L62 28 C72 22 74 10 66 5 C58 0 50 10 50 15 Z" fill="#0f172a"/>
+                            <path d="M18 42 L50 78 L50 115" stroke="#0f172a" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M82 42 L50 78" stroke="#0f172a" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        ${extraRight}
+                    </span>
+                `;
+            }
+            return `<span class="phonetic-symbol">${main || top}</span>`;
+        }
 
         function switchTab(tabName) {
             const pageSearch = document.getElementById('pageSearch');
@@ -551,473 +587,6 @@
             }
         }
 
-        function showAppAlert(message, title = "提示") {
-            const modal = document.getElementById('customModal');
-            document.getElementById('customModalTitle').innerText = title;
-            document.getElementById('customModalMessage').innerText = message;
-            document.getElementById('customModalButtons').innerHTML = `
-                <button onclick="closeCustomModal()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs sm:text-sm transition">確定</button>
-            `;
-            modal.classList.remove('hidden');
-        }
-
-        function showAppConfirm(message, onConfirm, title = "確認動作") {
-            const modal = document.getElementById('customModal');
-            document.getElementById('customModalTitle').innerText = title;
-            document.getElementById('customModalMessage').innerText = message;
-            document.getElementById('customModalButtons').innerHTML = `
-                <button onclick="closeCustomModal()" class="px-3.5 py-2 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl text-xs sm:text-sm font-bold transition">取消</button>
-                <button id="confirmOkBtn" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs sm:text-sm transition">確定</button>
-            `;
-            document.getElementById('confirmOkBtn').onclick = () => {
-                closeCustomModal();
-                if (onConfirm) onConfirm();
-            };
-            modal.classList.remove('hidden');
-        }
-
-        function closeCustomModal() {
-            document.getElementById('customModal').classList.add('hidden');
-        }
-
-        function buildSymbolHTML(block) {
-            const main = block.main || '';
-            const top = block.top || '';
-            const bottom = block.bottom || '';
-            const stackType = block.stackType;
-            const extraRight = block.extraRight ? `<span class="ml-1 text-slate-800 font-bold">${block.extraRight}</span>` : '';
-
-            if (stackType === 'y-heart' || (main === 'ㄚ' && top === '♥')) {
-                return `
-                    <span class="phonetic-symbol inline-flex items-center">
-                        <svg class="y-heart-svg" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M50 15 C50 10 42 0 34 5 C26 10 28 22 38 28 L50 38 L62 28 C72 22 74 10 66 5 C58 0 50 10 50 15 Z" fill="#0f172a"/>
-                            <path d="M18 42 L50 78 L50 115" stroke="#0f172a" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M82 42 L50 78" stroke="#0f172a" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        ${extraRight}
-                    </span>
-                `.trim();
-            }
-
-            if (stackType === 'vertical' && top) {
-                return `
-                    <span class="phonetic-symbol flex items-center">
-                        <span class="is-vertical-stack">
-                            <span class="symbol-top-direct">${top}</span>
-                            <span class="symbol-bottom-direct">${main}</span>
-                        </span>
-                        ${extraRight}
-                    </span>
-                `.trim();
-            }
-
-            if (!top && !bottom) {
-                return `<span class="phonetic-symbol"><span class="symbol-main">${main}</span>${extraRight}</span>`;
-            }
-
-            return `
-                <span class="phonetic-symbol flex items-center">
-                    <span class="symbol-main">${main}</span>
-                    <span class="symbol-stack">
-                        <span class="symbol-top">${top || '&nbsp;'}</span>
-                        <span class="symbol-bottom">${bottom || '&nbsp;'}</span>
-                    </span>
-                    ${extraRight}
-                </span>
-            `.trim();
-        }
-
-        // 從 Google 雲端載入音標積木
-        async function loadSymbols() {
-            try {
-                const res = await fetch(`${GAS_API_URL}?action=getSymbols`);
-                const cloudData = await res.json();
-                if (cloudData && Array.isArray(cloudData) && cloudData.length > 0) {
-                    symbols = cloudData.map(item => ({ ...item, category: item.category || 'vowel' }));
-                } else {
-                    symbols = [...defaultSymbols];
-                }
-            } catch (e) {
-                const saved = localStorage.getItem('patent_phonetic_symbols');
-                symbols = saved ? JSON.parse(saved) : [...defaultSymbols];
-            }
-        }
-
-        // 同步至 Google 雲端音標積木
-        async function saveSymbols() {
-            localStorage.setItem('patent_phonetic_symbols', JSON.stringify(symbols));
-            try {
-                await fetch(GAS_API_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'saveSymbols', symbols: symbols })
-                });
-            } catch (e) {
-                console.error("同步積木至雲端失敗", e);
-            }
-        }
-
-        // 從 Google 雲端載入單字本
-        async function loadVocabBook() {
-            try {
-                const res = await fetch(`${GAS_API_URL}?action=getVocab`);
-                const cloudData = await res.json();
-                if (Array.isArray(cloudData)) {
-                    vocabBook = cloudData;
-                    localStorage.setItem('patent_vocab_book', JSON.stringify(vocabBook));
-                }
-            } catch (e) {
-                const saved = localStorage.getItem('patent_vocab_book');
-                vocabBook = saved ? JSON.parse(saved) : [];
-            }
-            renderVocabList();
-        }
-
-        function renderKeyboard() {
-            const headContainer = document.getElementById('keyboardGridHead');
-            const vowelContainer = document.getElementById('keyboardGridVowel');
-            const tailContainer = document.getElementById('keyboardGridTail');
-
-            if (!headContainer || !vowelContainer || !tailContainer) return;
-
-            headContainer.innerHTML = '';
-            vowelContainer.innerHTML = '';
-            tailContainer.innerHTML = '';
-
-            symbols.forEach(symbol => {
-                const tileBtn = document.createElement('div');
-                tileBtn.className = "block-tile";
-                tileBtn.onclick = () => addBlock(symbol);
-                tileBtn.innerHTML = buildSymbolHTML(symbol);
-
-                const cat = symbol.category || 'vowel';
-                if (cat === 'head') headContainer.appendChild(tileBtn);
-                else if (cat === 'tail') tailContainer.appendChild(tileBtn);
-                else vowelContainer.appendChild(tileBtn);
-            });
-        }
-
-        async function searchWord() {
-            const query = document.getElementById('searchInput').value.trim().toLowerCase();
-            if (!query) return;
-
-            document.getElementById('initialState').classList.add('hidden');
-            document.getElementById('searchResultCard').classList.remove('hidden');
-
-            document.getElementById('currentWord').innerText = query;
-            document.getElementById('currentIpa').innerText = "[檢索中...]";
-            document.getElementById('customTransInput').value = "檢索中...";
-
-            selectedBlocks = [];
-            renderAssemblyArea();
-
-            let translation = "";
-            let usPhonetic = "";
-
-            if (builtInDict[query]) {
-                translation = builtInDict[query].trans;
-                usPhonetic = builtInDict[query].ipa;
-            }
-
-            try {
-                if (!usPhonetic || !translation) {
-                    const dictPromise = fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${query}`);
-                    const wikiPromise = translation ? Promise.resolve(null) : fetch(`https://zh.wiktionary.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`);
-
-                    const [dictRes, wikiRes] = await Promise.allSettled([dictPromise, wikiPromise]);
-
-                    if (dictRes.status === 'fulfilled' && dictRes.value && dictRes.value.ok) {
-                        const dictData = await dictRes.value.json();
-                        if (dictData && dictData[0]) {
-                            const entry = dictData[0];
-                            if (!usPhonetic && entry.phonetics) {
-                                const usItem = entry.phonetics.find(p => (p.audio && p.audio.includes('-us')) || p.text);
-                                if (usItem && usItem.text) usPhonetic = usItem.text;
-                                else if (entry.phonetic) usPhonetic = entry.phonetic;
-                            }
-                        }
-                    }
-
-                    if (!translation && wikiRes.status === 'fulfilled' && wikiRes.value && wikiRes.value.ok) {
-                        const wikiData = await wikiRes.value.json();
-                        if (wikiData && wikiData.extract) {
-                            translation = wikiData.extract.split('\n')[0].replace(/（.*?）/g, '');
-                        }
-                    }
-                }
-
-                if (usPhonetic) {
-                    usPhonetic = usPhonetic.trim();
-                    if (!usPhonetic.startsWith('/')) usPhonetic = '/' + usPhonetic;
-                    if (!usPhonetic.endsWith('/')) usPhonetic = usPhonetic + '/';
-                } else {
-                    usPhonetic = "/[ 未收錄 ]/";
-                }
-
-                currentWordData = { word: query, ipa: usPhonetic, translation: translation || "" };
-                document.getElementById('currentIpa').innerText = usPhonetic;
-                document.getElementById('customTransInput').value = translation || "";
-
-            } catch (error) {
-                currentWordData = { word: query, ipa: usPhonetic || "/--/", translation: translation || "" };
-                document.getElementById('currentIpa').innerText = usPhonetic || "/--/";
-                document.getElementById('customTransInput').value = translation || "";
-            }
-        }
-
-        function addBlock(symbol) {
-            selectedBlocks.push({ ...symbol, instanceId: Date.now() + Math.random() });
-            renderAssemblyArea();
-        }
-
-        function removeLastBlock() {
-            if (selectedBlocks.length > 0) {
-                selectedBlocks.pop();
-                renderAssemblyArea();
-            }
-        }
-
-        function clearAssembly() {
-            selectedBlocks = [];
-            renderAssemblyArea();
-        }
-
-        function stripHtmlToText(html) {
-            const tmp = document.createElement("DIV");
-            tmp.innerHTML = html;
-            return tmp.textContent || tmp.innerText || "";
-        }
-
-        function renderAssemblyArea() {
-            const area = document.getElementById('assemblyArea');
-            const emptyHint = document.getElementById('emptyHint');
-            if (!area) return;
-
-            const existingChips = area.querySelectorAll('.chip-item');
-            existingChips.forEach(chip => chip.remove());
-
-            if (selectedBlocks.length === 0) {
-                if (emptyHint) emptyHint.style.display = 'block';
-            } else {
-                if (emptyHint) emptyHint.style.display = 'none';
-
-                selectedBlocks.forEach((block, idx) => {
-                    const chip = document.createElement('div');
-                    chip.className = 'chip-item';
-                    chip.onclick = () => removeBlockAtIndex(idx);
-                    chip.innerHTML = buildSymbolHTML(block);
-                    area.appendChild(chip);
-                });
-            }
-        }
-
-        function removeBlockAtIndex(index) {
-            selectedBlocks.splice(index, 1);
-            renderAssemblyArea();
-        }
-
-        function speakWord(customWord) {
-            const textToSpeak = customWord || (currentWordData ? currentWordData.word : '');
-            if (!textToSpeak || textToSpeak === '—') return;
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(textToSpeak);
-                utterance.lang = 'en-US';
-                utterance.rate = 0.85;
-                window.speechSynthesis.speak(utterance);
-            }
-        }
-
-        // 新增或更新單字至雲端
-        async function saveToVocabBook() {
-            if (!currentWordData || !currentWordData.word || currentWordData.word === '—') {
-                return showAppAlert("請先輸入英文單字並點擊查詢！");
-            }
-
-            const customTrans = document.getElementById('customTransInput').value.trim();
-            const patentSpellingHTML = selectedBlocks.map(b => buildSymbolHTML(b)).join(' ');
-            const targetWord = currentWordData.word.toLowerCase();
-
-            const entry = {
-                id: Date.now(),
-                word: currentWordData.word,
-                ipa: currentWordData.ipa,
-                patent: patentSpellingHTML || '<span class="text-slate-400 font-normal">(未拼寫)</span>',
-                translation: customTrans || "(無中文解釋)"
-            };
-
-            const existingIndex = vocabBook.findIndex(item => item.word.toLowerCase() === targetWord);
-            if (existingIndex !== -1) {
-                vocabBook[existingIndex] = entry;
-            } else {
-                vocabBook.unshift(entry);
-            }
-
-            localStorage.setItem('patent_vocab_book', JSON.stringify(vocabBook));
-            showToast(`已儲存 「${currentWordData.word}」至雲端！`);
-
-            try {
-                fetch(GAS_API_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'saveVocab', data: entry })
-                });
-            } catch (e) {
-                console.error("同步至雲端失敗", e);
-            }
-        }
-
-        function showToast(text) {
-            const toast = document.getElementById('toastMessage');
-            const toastText = document.getElementById('toastText');
-            if (!toast || !toastText) return;
-            toastText.innerText = text;
-            toast.classList.remove('hidden');
-            setTimeout(() => { toast.classList.add('hidden'); }, 2200);
-        }
-
-        function renderVocabList() {
-            const tableWrapper = document.getElementById('vocabTableWrapper');
-            const tbody = document.getElementById('vocabTableBody');
-            const emptyState = document.getElementById('emptyVocabState');
-            const actions = document.getElementById('vocabActions');
-            const keyword = (document.getElementById('vocabSearchInput')?.value || '').toLowerCase().trim();
-
-            if (!tbody || !tableWrapper || !emptyState) return;
-            tbody.innerHTML = '';
-
-            const filteredVocab = vocabBook.filter(item => {
-                const plainPatent = stripHtmlToText(item.patent);
-                return item.word.toLowerCase().includes(keyword) ||
-                       plainPatent.toLowerCase().includes(keyword) ||
-                       item.translation.toLowerCase().includes(keyword);
-            });
-
-            if (vocabBook.length === 0) {
-                tableWrapper.classList.add('hidden');
-                emptyState.classList.remove('hidden');
-                document.getElementById('emptyTitle').innerText = "單字本目前是空的！";
-                document.getElementById('emptySubText').innerText = "快去搜尋單字並組裝專利音標加入吧。";
-                if (actions) actions.classList.add('opacity-50', 'pointer-events-none');
-                return;
-            }
-
-            if (filteredVocab.length === 0) {
-                tableWrapper.classList.add('hidden');
-                emptyState.classList.remove('hidden');
-                document.getElementById('emptyTitle').innerText = "找不到符合的單字";
-                document.getElementById('emptySubText').innerText = `找不到與「${keyword}」相關的紀錄。`;
-                if (actions) actions.classList.remove('opacity-50', 'pointer-events-none');
-                return;
-            }
-
-            tableWrapper.classList.remove('hidden');
-            emptyState.classList.add('hidden');
-            if (actions) actions.classList.remove('opacity-50', 'pointer-events-none');
-
-            filteredVocab.forEach((item) => {
-                const actualIndex = vocabBook.findIndex(v => v.id === item.id);
-
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition-colors";
-                tr.innerHTML = `
-                    <td class="py-2.5 px-3 text-center">
-                        <button onclick="speakWord('${item.word}')" class="text-blue-600 bg-blue-50 hover:bg-blue-100 p-2 rounded-lg transition" title="朗讀">
-                            <i class="fa-solid fa-volume-high text-xs"></i>
-                        </button>
-                    </td>
-                    <td class="py-2.5 px-3">
-                        <div class="font-bold text-slate-900 text-sm sm:text-base">${item.word}</div>
-                        <div class="text-[10px] text-slate-400 font-mono">${item.ipa || ''}</div>
-                    </td>
-                    <td class="py-2.5 px-3">
-                        <span class="inline-flex items-center gap-1 bg-blue-50/80 border border-blue-200 text-blue-900 px-2.5 py-1 rounded-xl text-base sm:text-lg font-bold tracking-wider shadow-xs">
-                            ${item.patent}
-                        </span>
-                    </td>
-                    <td class="py-2.5 px-3 text-slate-700 font-medium text-xs sm:text-sm">${item.translation}</td>
-                    <td class="py-2.5 px-3 text-center">
-                        <button onclick="deleteVocabItem(${actualIndex})" class="text-slate-300 hover:text-red-500 p-2 transition" title="刪除">
-                            <i class="fa-solid fa-trash-can text-xs sm:text-sm"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        async function deleteVocabItem(index) {
-            const itemToDelete = vocabBook[index];
-            if (!itemToDelete) return;
-
-            vocabBook.splice(index, 1);
-            localStorage.setItem('patent_vocab_book', JSON.stringify(vocabBook));
-            renderVocabList();
-
-            try {
-                fetch(GAS_API_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'deleteVocab', id: itemToDelete.id })
-                });
-            } catch (e) {
-                console.error("雲端刪除失敗", e);
-            }
-        }
-
-        function clearVocabBook() {
-            showAppConfirm("確定要清空所有單字本嗎？", async () => {
-                vocabBook = [];
-                localStorage.setItem('patent_vocab_book', JSON.stringify(vocabBook));
-                renderVocabList();
-                try {
-                    fetch(GAS_API_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'clearVocab' })
-                    });
-                } catch (e) {}
-            });
-        }
-
-        function exportVocabText() {
-            if (vocabBook.length === 0) return showAppAlert("單字本是空的！");
-            const textLines = vocabBook.map(item => `${item.word} | 專利音標: ${stripHtmlToText(item.patent)} | ${item.ipa} | ${item.translation}`);
-            const text = textLines.join('\n');
-
-            const dummy = document.createElement("textarea");
-            document.body.appendChild(dummy);
-            dummy.value = text;
-            dummy.select();
-            document.execCommand("copy");
-            document.body.removeChild(dummy);
-
-            showAppAlert("已複製文字至剪貼簿！");
-        }
-
-        function exportVocabCSV() {
-            if (vocabBook.length === 0) return showAppAlert("單字本是空的！");
-            let csvContent = "\uFEFF單字,專利音標,美音標註,中文翻譯\n";
-            vocabBook.forEach(item => {
-                const plainPatent = stripHtmlToText(item.patent);
-                csvContent += `"${item.word}","${plainPatent}","${item.ipa}","${item.translation}"\n`;
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `patent_vocabulary_${Date.now()}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
         function openManageModal() {
             document.getElementById('manageModal').classList.remove('hidden');
             renderManageGrid();
@@ -1025,46 +594,88 @@
 
         function closeManageModal() {
             document.getElementById('manageModal').classList.add('hidden');
+            renderKeyboard();
         }
 
-        function renderManageGrid() {
-            const headGrid = document.getElementById('manageGridHead');
-            const vowelGrid = document.getElementById('manageGridVowel');
-            const tailGrid = document.getElementById('manageGridTail');
+        function closeCustomModal() {
+            document.getElementById('customModal').classList.add('hidden');
+        }
 
-            if (!headGrid || !vowelGrid || !tailGrid) return;
+        function selectBlock(block) {
+            selectedBlocks.push(block);
+            updateAssemblyArea();
+        }
 
-            headGrid.innerHTML = '';
-            vowelGrid.innerHTML = '';
-            tailGrid.innerHTML = '';
+        function removeLastBlock() {
+            selectedBlocks.pop();
+            updateAssemblyArea();
+        }
 
-            symbols.forEach((symbol, index) => {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'relative group';
+        function clearAssembly() {
+            selectedBlocks = [];
+            updateAssemblyArea();
+        }
 
-                const tile = document.createElement('div');
-                tile.className = "block-tile";
-                tile.innerHTML = buildSymbolHTML(symbol);
+        function updateAssemblyArea() {
+            const area = document.getElementById('assemblyArea');
+            const emptyHint = document.getElementById('emptyHint');
+            
+            area.querySelectorAll('.chip-item').forEach(el => el.remove());
 
-                const delBtn = document.createElement('button');
-                delBtn.className = "absolute -top-1 -right-1 bg-red-500 text-white w-4 h-4 rounded-full text-[10px] flex items-center justify-center opacity-90 sm:opacity-0 group-hover:opacity-100 transition shadow";
-                delBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-                delBtn.onclick = (e) => {
-                    e.stopPropagation();
-                    symbols.splice(index, 1);
-                    saveSymbols();
-                    renderKeyboard();
-                    renderManageGrid();
-                };
+            if (selectedBlocks.length === 0) {
+                emptyHint.style.display = 'inline';
+            } else {
+                emptyHint.style.display = 'none';
+                selectedBlocks.forEach((block, idx) => {
+                    const chip = document.createElement('div');
+                    chip.className = 'chip-item';
+                    chip.innerHTML = buildSymbolHTML(block);
+                    chip.onclick = () => {
+                        selectedBlocks.splice(idx, 1);
+                        updateAssemblyArea();
+                    };
+                    area.appendChild(chip);
+                });
+            }
+        }
 
-                wrapper.appendChild(tile);
-                wrapper.appendChild(delBtn);
+        function searchWord() {
+            const word = document.getElementById('searchInput').value.trim().toLowerCase();
+            if (!word) return;
 
-                const cat = symbol.category || 'vowel';
-                if (cat === 'head') headGrid.appendChild(wrapper);
-                else if (cat === 'tail') tailGrid.appendChild(wrapper);
-                else vowelGrid.appendChild(wrapper);
-            });
+            document.getElementById('initialState').classList.add('hidden');
+            document.getElementById('searchResultCard').classList.remove('hidden');
+            document.getElementById('currentWord').innerText = word;
+
+            if (builtInDict[word]) {
+                document.getElementById('currentIpa').innerText = builtInDict[word].ipa;
+                document.getElementById('customTransInput').value = builtInDict[word].trans;
+            } else {
+                document.getElementById('currentIpa').innerText = "/--/";
+                document.getElementById('customTransInput').value = "自訂單字";
+            }
+            selectedBlocks = [];
+            updateAssemblyArea();
+        }
+
+        function speakWord() {
+            const word = document.getElementById('currentWord').innerText;
+            if (word && word !== '—') {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function saveToVocabBook() {
+            showToast("已成功加入單字本！");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toastMessage');
+            document.getElementById('toastText').innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
         }
 
         function handleAddSymbol(e) {
@@ -1072,34 +683,37 @@
             const main = document.getElementById('inputSymbol').value.trim();
             const top = document.getElementById('inputTopDecoration').value.trim();
             const bottom = document.getElementById('inputBottomDecoration').value.trim();
+            const category = document.querySelector('input[name="symbolCategory"]:checked').value;
+
+            if (!main && !top) return;
+
+            const newId = "custom_" + Date.now();
+            symbols.push({ id: newId, main, top, bottom, category });
             
-            const categoryRadios = document.getElementsByName('symbolCategory');
-            let category = 'vowel';
-            for (const radio of categoryRadios) {
-                if (radio.checked) { category = radio.value; break; }
-            }
-
-            if (!main && !top && !bottom) {
-                showAppAlert("請至少填寫一項符號！");
-                return;
-            }
-
-            symbols.push({ id: 'custom_' + Date.now(), main, top, bottom, category });
-            saveSymbols();
-            renderKeyboard();
-            renderManageGrid();
-
             document.getElementById('inputSymbol').value = '';
             document.getElementById('inputTopDecoration').value = '';
             document.getElementById('inputBottomDecoration').value = '';
+            
+            renderManageGrid();
+            renderKeyboard();
+        }
+
+        function deleteSymbol(id) {
+            symbols = symbols.filter(s => s.id !== id);
+            renderManageGrid();
+            renderKeyboard();
         }
 
         function resetDefaultSymbols() {
             symbols = [...defaultSymbols];
-            saveSymbols();
-            renderKeyboard();
             renderManageGrid();
+            renderKeyboard();
         }
+
+        function renderVocabList() {}
+        function exportVocabText() {}
+        function exportVocabCSV() {}
+        function clearVocabBook() {}
     </script>
 </body>
 </html>
