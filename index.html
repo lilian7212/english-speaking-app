@@ -524,6 +524,11 @@
             await loadSymbols();
             await loadVocabBook();
             renderKeyboard();
+            
+            // 加上這行，確保頁面載入時管理積木列表也會被渲染
+            if (typeof renderManageGrid === 'function') {
+                renderManageGrid();
+            }
         };
 
         function switchTab(tabName) {
